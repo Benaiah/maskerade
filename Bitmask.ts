@@ -21,13 +21,11 @@ const assert = (condition: boolean, message?: string) => { return; };
 
   In order to check the value of a specific section, we do a bitwise
   AND with a value that masks out everything but the region we"re
-  interested in. For example, if we want to get the tile"s water
-  level, we would first do this: `tile & 0x00000f0`. If we simple need
-  it for comparison, this is already enough - we can simple check
-  `tile === desiredValue`. If we wish to get the value as an
-  (unsigned) number, we must do one additional step: we zero-fill
-  right shift the requisite number of places to move the value to the
-  zero place. In the case of water level, this would mean `tile >>> 4`.
+  interested in. If we simply need it for comparison, this is already
+  enough - we can simple check `value === desiredValue`. If we wish to
+  get the value of that specific field as an (unsigned) number, we
+  must do one additional step: we zero-fill right shift the requisite
+  number of places to move the value to the zero place.
 
   The Bitmask class is used to abstract bitmask access and creation.
   It adds overhead, but for the majority of cases that shouldn"t be a
@@ -36,7 +34,7 @@ const assert = (condition: boolean, message?: string) => { return; };
 
   NB: I don't like that the data sections are stringly typed, but as
   far as I can tell there's no way to use something like an enum with
-  TypeScript's current type system. This isn"t too bad, as Bitmask
+  TypeScript's current type system. This isn't too bad, as Bitmask
   should probably be wrapped somehow anyway, so the stringly-typing
   should stay fairly confined.
 */
