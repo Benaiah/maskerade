@@ -1,16 +1,16 @@
 /* tslint:disable:no-bitwise */
 
 // Swap these two definitions to toggle assertions
-// const assert = (condition: boolean, message?: string) { };
+const assert = (condition: boolean, message?: string) => { return; };
 
-const assert = (condition: boolean, message?: string) => {
-  if (!condition) {
-    const errorMessage = (message !== undefined)
-      ? "Assertion failed"
-      : message;
-    throw new Error(errorMessage);
-  }
-};
+// const assert = (condition: boolean, message?: string) => {
+//   if (!condition) {
+//     const errorMessage = (message !== undefined)
+//       ? "Assertion failed"
+//       : message;
+//     throw new Error(errorMessage);
+//   }
+// };
 
 /*
   JS uses signed 32-bit integers in "two's complement format". We
