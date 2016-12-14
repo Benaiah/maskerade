@@ -46,7 +46,6 @@ const range = (num: number): number[] => {
 export interface ISection {
   name: string;
   length: number;
-  start?: number;
 }
 
 type BitmaskInternalSection = {
@@ -71,10 +70,6 @@ export class Bitmask {
     return range(len).reduce((a, b) => a + Math.pow(2, b + pos), 0);
   }
 
-  // The Bitmask constructor takes a list of data to store in the
-  // bitmask. Each should be a tuple of [number, number]. The first
-  // number is the ID, which should be an enum value. The second is
-  // the number of bits to use for that data section.
   public readonly used: number;
   public readonly free: number;
   public readonly sections: BitmaskInternalSection[];
