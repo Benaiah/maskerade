@@ -115,6 +115,13 @@ export class Bitmask {
     return ((val & mask) >>> start);
   }
 
+  public setSection(val: number, sectionName: string, newSectionValue: number) {
+    const sectionStart = this.sectionsByName[sectionName].start;
+    const clearSectionMask = ~this.sectionsByName[sectionName].mask;
+    const newValueMask = newSectionValue << sectionStart;
+    return val & clearSectionMask | newValueMask;
+  }
+
   public toObject(val: number): any {
     return this.sections.reduce((result, section) => {
       let newObj = {};
