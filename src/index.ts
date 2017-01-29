@@ -72,8 +72,11 @@ export class Bitmask {
 
   public readonly used: number;
   public readonly free: number;
-  public readonly sections: BitmaskInternalSection[];
-  public readonly sectionsByName: { [name: string]: BitmaskInternalSection };
+
+  private _sections: BitmaskInternalSection[];
+  get sections(): ISection[] { return this._sections; }
+
+  private sectionsByName: { [name: string]: BitmaskInternalSection };
 
   constructor(sections: ISection[]) {
     this.used = sections.reduce((result, section) => result + section.length, 0);
@@ -81,7 +84,7 @@ export class Bitmask {
     this.free = 32 - this.used;
 
     this.sectionsByName = {};
-    this.sections = sections.reduce((result, section) => {
+    this._sections = sections.reduce((result, section) => {
       return {
         currentlyAt: result.currentlyAt + section.length,
         sections: [...result.sections, {
@@ -93,14 +96,14 @@ export class Bitmask {
       };
     }, { currentlyAt: 0, sections: [] }).sections;
 
-    this.sectionsByName = this.sections.reduce((result, section) => {
+    this.sectionsByName = this._sections.reduce((result, section) => {
       result[section.name] = section;
       return result;
     }, {});
   }
 
   public create(values: { [sectionName: string]: number }): number {
-    return this.sections.reduce((result, section) => {
+    return this._sections.reduce((result, section) => {
       const val = values[section.name];
       assert(Math.pow(2, section.length) >= val, "Value too large for data section.");
       const valueAtPosition = val << section.start;
@@ -123,7 +126,7 @@ export class Bitmask {
   }
 
   public toObject(val: number): any {
-    return this.sections.reduce((result, section) => {
+    return this._sections.reduce((result, section) => {
       let newObj = {};
       newObj[section.name] = this.getSection(val, section.name);
       return Object.assign(result, newObj);
