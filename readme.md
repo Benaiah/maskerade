@@ -47,7 +47,7 @@ Maskerade's interface is fairly simple. It provides a Bitmask class
 which is constructed like so:
 
 ````js
-import Bitmask from "maskerade";
+import { Bitmask } from "maskerade";
 
 // The dataSections should contain a set of objects with "name" and
 // "length" properties. The name is used as a key when actually
