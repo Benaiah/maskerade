@@ -1,16 +1,25 @@
 /* tslint:disable:no-bitwise */
 
 // Swap these two definitions to toggle assertions
-const assert = (condition: boolean, message?: string) => { return; };
+const assertNoop = (condition: boolean, message?: string) => { return; };
+const assertReal = (condition: boolean, message?: string) => {
+  if (!condition) {
+    const errorMessage = (message === undefined)
+      ? "Assertion failed"
+      : message;
+    throw new Error(errorMessage);
+  }
+};
 
-// const assert = (condition: boolean, message?: string) => {
-//   if (!condition) {
-//     const errorMessage = (message !== undefined)
-//       ? "Assertion failed"
-//       : message;
-//     throw new Error(errorMessage);
-//   }
-// };
+let assert = assertReal;
+
+const setAssertMode = (actuallyAssert: boolean): void => {
+  if (actuallyAssert) {
+    assert = assertReal;
+  } else {
+    assert = assertNoop;
+  }
+};
 
 /*
   JS uses signed 32-bit integers in "two's complement format". We
@@ -55,7 +64,7 @@ type BitmaskInternalSection = {
   start: number,
 };
 
-export class Bitmask {
+class Bitmask {
   public static Print(num: number): string {
     const places = 32;
     const len = num.toString(2).length;
@@ -104,7 +113,7 @@ export class Bitmask {
 
   public create(values: { [sectionName: string]: number }): number {
     return this._sections.reduce((result, section) => {
-      const val = values[section.name];
+      const val = (values[section.name] !== undefined) ? values[section.name] : 0;
       assert(Math.pow(2, section.length) >= val, "Value too large for data section.");
       const valueAtPosition = val << section.start;
       return result | valueAtPosition;
@@ -134,4 +143,4 @@ export class Bitmask {
   }
 }
 
-export default Bitmask;
+export { Bitmask, setAssertMode };

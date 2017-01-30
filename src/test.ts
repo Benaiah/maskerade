@@ -1,4 +1,4 @@
-import Bitmask from "./index";
+import { Bitmask, setAssertMode } from "./index";
 
 import { expect } from "chai";
 import "mocha";
@@ -16,13 +16,6 @@ describe("Bitmask printing", () => {
 });
 
 describe("Bitmask creation and retrieval", () => {
-  it("should throw an error when trying to use too many bits", () => {
-    expect(() => new Bitmask([
-      { name: "a", length: 16 },
-      { name: "b", length: 17 }
-    ])).to.throw(Error);
-  });
-
   const testBitmask = new Bitmask([
     { name: "section1", length: 2 },
     { name: "section2", length: 3 },
@@ -31,10 +24,6 @@ describe("Bitmask creation and retrieval", () => {
     { name: "section5", length: 6 },
     { name: "section6", length: 12 }
   ]);
-
-  it("should throw an error when a property value is too large", () => {
-
-  });
 
   // We need to be careful to test only the public API and not enforce
   // specific layouts, as it's possible that different layouts may
@@ -66,5 +55,28 @@ describe("Bitmask creation and retrieval", () => {
       "section5": 60,
       "section6": 4000
     });
+  });
+
+  const tooManyBitsErrorFunc = () => {
+    const badBitmask = new Bitmask([
+      { name: "a", length: 16 },
+      { name: "b", length: 17 }
+    ]);
+  };
+  it("should throw an error when trying to use too many bits", () =>
+     expect(tooManyBitsErrorFunc).to.throw(Error));
+
+  const tooLargeSectionValueFunc = () => {
+    const value = testBitmask.create({
+      "section1": 8
+    });
+  };
+  it("should throw an error when setting a section to a value too large", () =>
+    expect(tooLargeSectionValueFunc).to.throw(Error));
+
+  it("should not throw errors when assertions are turned off", () => {
+    setAssertMode(false);
+    expect(tooManyBitsErrorFunc).to.not.throw(Error);
+    expect(tooLargeSectionValueFunc).to.not.throw(Error);
   });
 });
