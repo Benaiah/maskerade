@@ -1,7 +1,19 @@
 # Maskerade
 
-Maskerade is a TypeScript library for easily interfacing with
-bitmasks - integers which store multiple values in specific bits.
+Maskerade is a TypeScript library with no runtime dependencies for
+easily interfacing with bitmasks - integers which store multiple
+values in specific bits.
+
+## Installation
+
+````bash
+$ npm install maskerade
+````
+
+Maskerade exports two functions: `Bitmask` and `setAssertMode`. The
+latter function allows you to disable runtime sanity checking for
+performance reasons - though it's recommended to leave assertions on,
+especially during development.
 
 ## Why bitmasks?
 
@@ -89,4 +101,14 @@ exampleBitmask.toObject(val2)
 //   terrainType: 2,
 //   height: 11
 // }
+````
+
+## Development
+
+````bash
+git clone git@github.com:Benaiah/maskerade.git
+cd maskerade
+npm install --dev                              # Install dev dependencies
+npm test                                       # Run tests (at src/test.ts)
+npm run build                                  # Compile JS and definitions
 ````

@@ -8,7 +8,8 @@
     "lib/"
   ],
   "scripts": {
-    "prepublish": "tsc -p .",
+    "build": "tsc -p .",
+    "prepublish": "npm run build",
     "test": "mocha -r ts-node/register --watch src/**/test.ts"
   },
   "author": "",
